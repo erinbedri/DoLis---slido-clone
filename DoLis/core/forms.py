@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from DoLis.core.models import Question
+from DoLis.core.models import Question, Event
 
 UserModel = get_user_model()
 
@@ -66,3 +66,20 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = UserModel
         fields = ('username', 'password1', 'password2')
+
+
+class EventCreateForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('name', 'code', 'description')
+        widgets = {
+            'name': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'code': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'description': forms.Textarea(
+                attrs={'class': 'form-control'}
+            ),
+        }

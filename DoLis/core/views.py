@@ -1,17 +1,20 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from DoLis.core.forms import QuestionForm, LoginForm, RegistrationForm
+from DoLis.core.forms import QuestionForm, LoginForm, RegistrationForm, EventCreateForm
 from DoLis.core.models import Event, Question
 
 
 def homepage(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
 
-    events = Event.objects.filter(Q(code__icontains=q))
+    events = Event.objects\
+        .filter(Q(code__icontains=q))\
+        .order_by('-created_at')
     events_count = events.count()
 
     context = {
@@ -93,3 +96,20 @@ def logout_user(request):
     logout(request)
     return redirect('core:homepage')
 
+
+@login_required
+def event_create(request):
+    if request.method == 'POST':
+        form = EventCreateForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.owner = request.user
+            event.save()
+            return redirect('core:event details', event.id)
+    else:
+        form = EventCreateForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'core/event-create.html', context)
