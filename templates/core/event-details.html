@@ -40,12 +40,16 @@
                             </div>
                             <div class="card-body">
                                 <blockquote class="blockquote mb-0">
-                                    <p style="font-size: small">{{ question.body }}</p>
+                                    <p style="font-size: small">{{ question.body|linebreaksbr }}</p>
                                 </blockquote>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#question{{ question.id }}" style="margin-top: 15px">
-                                        <i class="fa-solid fa-reply"></i> Replies</button>
+                                        <i class="fa-solid fa-reply"></i>
+                                        {% if question.replies.all.count == 1 %}{{ question.replies.all.count }} Reply
+                                        {% else %} {{ question.replies.all.count }} Replies
+                                        {% endif %}
+                                    </button>
                                     <!-- Modal -->
                                     <div class="modal fade" id="question{{ question.id }}" tabindex="-1"
                                          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -61,7 +65,7 @@
                                                         <span class="badge rounded-pill bg-dark">{{ forloop.revcounter }}</span>
                                                         <b>{{ reply.author }}</b> said
                                                         {{ reply.created_at|timesince }} ago
-                                                        <p>- {{ reply.body }}</p>
+                                                        <p>- {{ reply.body|linebreaksbr }}</p>
                                                     {% empty %}
                                                         There are no replies.
                                                     {% endfor %}
