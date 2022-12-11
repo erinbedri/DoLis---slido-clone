@@ -35,6 +35,22 @@ def event_details(request, pk):
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
+            parent_obj = None
+            try:
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+
+            if parent_id:
+                parent_obj = Question.objects.get(id=parent_id)
+                if parent_obj:
+                    reply_question = form.save(commit=False)
+                    reply_question.author = request.user
+                    reply_question.event = event
+                    reply_question.parent = parent_obj
+                    reply_question.save()
+                    return HttpResponseRedirect(reverse('core:event details', args=[str(pk)]))
+
             question = form.save(commit=False)
             question.event = event
             question.author = request.user

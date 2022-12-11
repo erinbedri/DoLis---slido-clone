@@ -61,5 +61,13 @@ class Question(models.Model):
         auto_now=True,
     )
 
+    parent = models.ForeignKey(
+        'self',
+        on_delete=CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
+
     def __str__(self):
         return f'{self.body} - {self.author}'
