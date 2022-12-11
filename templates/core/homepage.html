@@ -40,6 +40,11 @@
                         </div>
                     </div>
                 </div>
+            {% empty %}
+                <h5 class="text-center">There are no events mathing your search.</h5>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center" style="margin-top: 15px">
+                    <a href="{% url 'core:homepage' %}" type="submit" class="btn btn-dark">Clear</a>
+                </div>
             {% endfor %}
         </div>
     </section>

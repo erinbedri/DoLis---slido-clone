@@ -1,6 +1,10 @@
+from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 
+from DoLis.core.forms import QuestionForm, LoginForm, RegistrationForm
 from DoLis.core.models import Event, Question
 
 
@@ -25,9 +29,67 @@ def event_details(request, pk):
         .filter(event=event)\
         .order_by('-created_at')
 
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.event = event
+            question.author = request.user
+            question.save()
+            return HttpResponseRedirect(reverse('core:event details', args=[str(pk)]))
+    else:
+        form = QuestionForm()
+
     context = {
         'event': event,
         'questions': questions,
+        'form': form,
     }
 
     return render(request, 'core/event-details.html', context)
+
+
+def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('core:homepage')
+
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('core:homepage')
+    else:
+        form = LoginForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'core/login.html', context)
+
+
+def register_user(request):
+    if request.user.is_authenticated:
+        return redirect('core:homepage')
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('core:login')
+    else:
+        form = RegistrationForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'core/register.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('core:homepage')
+

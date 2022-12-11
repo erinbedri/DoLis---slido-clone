@@ -11,12 +11,22 @@
 
 
             <div class="col-10">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text" id="inputGroup-sizing-lg"><i class="fa-solid fa-user"></i></span>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-lg" placeholder="Type Your Question">
-                    <button class="btn btn-outline-secondary" type="button">Send</button>
-                </div>
+                {% if not request.user.is_authenticated %}
+                    <h3>Please log in first to comment</h3>
+                {% else %}
+                    <div>
+                        <form method="post" action="{% url 'core:event details' event.id %}">
+                            {% csrf_token %}
+                            {{ form }}
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-dark" style="margin-top: 10px">Ask Question
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <br>
 
                 {% for question in questions %}
                     <div class="card" style="margin-top: 15px">

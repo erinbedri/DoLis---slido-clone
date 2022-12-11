@@ -1,9 +1,16 @@
 <nav class="navbar" style="padding: 21px 0">
     <div class="container-fluid">
-        <b><a class="navbar-brand logo-link" href="{% url 'core:homepage' %}">DoLis</a></b>
-        <div>
-            <a class="btn btn-outline-dark" href="#" role="button">Log In</a>
-            <a class="btn btn-dark" href="#" role="button">Sign Up</a>
-        </div>
+        <b><a class="navbar-brand" href="{% url 'core:homepage' %}">DoLis</a></b>
+        {% if not request.user.is_authenticated %}
+            <div>
+                <a class="btn btn-outline-dark" href="{% url 'core:login' %}" role="button">Log In</a>
+                <a class="btn btn-dark" href="{% url 'core:register' %}" role="button">Sign Up</a>
+            </div>
+        {% else %}
+            <div>
+                <a class="btn btn-outline-dark" href="#" role="button">Create Event</a>
+                <a class="btn btn-dark" href="{% url 'core:logout' %}" role="button">Log Out</a>
+            </div>
+        {% endif %}
     </div>
 </nav>
