@@ -17,6 +17,7 @@ class Event(models.Model):
 
     code = models.CharField(
         max_length=30,
+        unique=True,
     )
 
     description = models.TextField(
@@ -35,3 +36,30 @@ class Event(models.Model):
 
     def __str__(self):
         return f'Event Name: {self.name}'
+
+
+class Question(models.Model):
+    author = models.ForeignKey(
+        UserModel,
+        on_delete=CASCADE,
+    )
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=CASCADE,
+    )
+
+    body = models.TextField(
+        max_length=300,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    def __str__(self):
+        return f'{self.body} - {self.author}'

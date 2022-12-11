@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <section>
+        <div class="row">
+            <div class="col-2">
+                <h3>{{ event.name }}</h3>
+                <b>#{{ event.code }}</b>
+                <p style="margin-top: 10px"><small>{{ event.description }}</small></p>
+            </div>
+
+
+            <div class="col-10">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="inputGroup-sizing-lg"><i class="fa-solid fa-user"></i></span>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-lg" placeholder="Type Your Question">
+                    <button class="btn btn-outline-secondary" type="button">Send</button>
+                </div>
+
+                {% for question in questions %}
+                    <div class="card" style="margin-top: 15px">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    <span class="badge rounded-pill bg-dark">{{ forloop.revcounter }}</span>
+                                    <b>{{ question.author }}</b> said {{ question.created_at|timesince }} ago
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p style="font-size: small">{{ question.body }}</p>
+                            </blockquote>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

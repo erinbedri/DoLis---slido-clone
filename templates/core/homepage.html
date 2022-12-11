@@ -22,7 +22,11 @@
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <h3 class="text-center" style="margin-bottom: 15px">Events</h3>
-                <p class="text-center">Browse among <b>{{ events_count }}</b> events.</p>
+                {% if query %}
+                    <p class="text-center">Searching for <b>{{ query }}</b>.</p>
+                {% else %}
+                    <p class="text-center">Browse among <b>{{ events_count }}</b> events.</p>
+                {% endif %}
             </div>
         </div>
         <div class="row" style="margin-top: 15px">
@@ -32,7 +36,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ event.name }}</h5>
                             <p class="card-text">#{{ event.code }}</p>
-                            <a href="#" class="btn btn-dark">Join Event</a>
+                            <a href="{% url 'core:event details' event.id %}" class="btn btn-dark">Join Event</a>
                         </div>
                     </div>
                 </div>
