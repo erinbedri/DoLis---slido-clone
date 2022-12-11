@@ -50,7 +50,7 @@ class Question(models.Model):
     )
 
     body = models.TextField(
-        max_length=500,
+        max_length=1500,
     )
 
     created_at = models.DateTimeField(
