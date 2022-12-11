@@ -77,7 +77,8 @@ class EventCreateForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
             'code': forms.TextInput(
-                attrs={'class': 'form-control'}
+                attrs={'class': 'form-control',
+                       'placeholder': '#'}
             ),
             'description': forms.Textarea(
                 attrs={'class': 'form-control'}

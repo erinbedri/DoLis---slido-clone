@@ -1,6 +1,6 @@
 <nav class="navbar" style="padding: 21px 0">
     <div class="container-fluid">
-        <b><a class="navbar-brand" href="{% url 'core:homepage' %}">DoLis</a></b>
+        <b><a class="navbar-brand" href="{% url 'core:homepage' %}">DOLIS</a></b>
         {% if not request.user.is_authenticated %}
             <div>
                 <a class="btn btn-outline-dark" href="{% url 'core:login' %}" role="button">Log In</a>
