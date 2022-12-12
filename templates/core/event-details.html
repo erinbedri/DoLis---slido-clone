@@ -9,7 +9,6 @@
                 <p style="margin-top: 10px"><small>{{ event.description }}</small></p>
             </div>
 
-
             <div class="col-10">
                 {% if not request.user.is_authenticated %}
                     <h4>Please log in first to comment</h4>
@@ -36,7 +35,6 @@
                         </form>
                     </div>
                 {% endif %}
-
                 <br>
 
                 <nav>
@@ -56,12 +54,18 @@
                         {% for question in questions %}
                             {% if not question.parent %}
                                 <div class="card" style="margin-top: 15px">
-                                    <div class="card-header">
+                                    <div class="card-header" {% if request.user == question.author %}
+                                         style="background-color: #D8D8D8" {% endif %}>
                                         <div class="row">
                                             <div class="col">
-                                                <b>{{ question.author }}</b> said {{ question.created_at|timesince }}
-                                                ago
+                                                <b>{{ question.author }}</b>
+                                                said {{ question.created_at|timesince }} ago
                                             </div>
+                                            {% if request.user == question.author %}
+                                                <div class="col-1">
+                                                    <a href="#" class="link-dark"><i class="bi bi-trash"></i></a> Delete
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -80,6 +84,7 @@
                                                     {{ question.replies.all.count }} Replies
                                                 {% endif %}
                                             </button>
+
                                             <!-- Modal -->
                                             <div class="modal fade" id="question{{ question.id }}" tabindex="-1"
                                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,6 +106,7 @@
                                                                 There are no replies.
                                                             {% endfor %}
                                                         </div>
+
                                                         {% if request.user.is_authenticated %}
                                                             <div class="modal-footer">
                                                                 <form action="{% url 'core:event details' event.id %}"
@@ -121,6 +127,7 @@
                                                                 </form>
                                                             </div>
                                                         {% endif %}
+
                                                     </div>
                                                 </div>
                                             </div>
