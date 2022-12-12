@@ -31,6 +31,7 @@ def event_details(request, pk):
     questions = Question.objects\
         .filter(event=event)\
         .order_by('-created_at')
+    questions_count = questions.count()
 
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -62,6 +63,7 @@ def event_details(request, pk):
     context = {
         'event': event,
         'questions': questions,
+        'questions_count': questions_count,
         'form': form,
     }
 
