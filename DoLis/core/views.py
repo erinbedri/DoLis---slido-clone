@@ -137,12 +137,17 @@ def event_create(request):
     return render(request, 'core/event-create.html', context)
 
 
+@login_required
 def question_delete(request, pk):
     question = get_object_or_404(Question, pk=pk)
-    question.delete()
+
+    if question.author == request.user:
+        question.delete()
+
     return redirect('core:event details', question.event.id)
 
 
+@login_required
 def own_events_list(request):
     events = Event.objects.filter(owner=request.user)
 
@@ -150,3 +155,13 @@ def own_events_list(request):
         'events': events,
     }
     return render(request, 'core/events-own.html', context)
+
+
+@login_required
+def event_delete(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+
+    if event.owner == request.user:
+        event.delete()
+
+    return redirect('core:own events list')
