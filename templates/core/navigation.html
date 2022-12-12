@@ -9,6 +9,7 @@
         {% else %}
             <div>
                 <a class="btn btn-outline-dark" href="{% url 'core:event create' %}" role="button">Create Event</a>
+                <a class="btn btn-outline-dark" href="{% url 'core:own events list' %}" role="button">My Events</a>
                 <a class="btn btn-dark" href="{% url 'core:logout' %}" role="button">Log Out</a>
             </div>
         {% endif %}

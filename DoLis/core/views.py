@@ -141,3 +141,12 @@ def question_delete(request, pk):
     question = get_object_or_404(Question, pk=pk)
     question.delete()
     return redirect('core:event details', question.event.id)
+
+
+def own_events_list(request):
+    events = Event.objects.filter(owner=request.user)
+
+    context = {
+        'events': events,
+    }
+    return render(request, 'core/events-own.html', context)

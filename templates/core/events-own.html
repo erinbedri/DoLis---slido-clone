@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <section style="margin: 50px 50px">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h3 class="text-center" style="margin-bottom: 15px">My Events</h3>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px">
+            {% for event in events %}
+                <div class="col-sm-3">
+                    <div class="card text-center" style="margin-bottom: 15px">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.name }}</h5>
+                            <p class="card-text">#{{ event.code }}</p>
+                            <a href="{% url 'core:event details' event.id %}" class="btn btn-dark">Join Event</a>
+                            {% if request.user == event.owner %}
+                                <a href="#" class="btn btn-outline-dark">Edit</a>
+                                <a href="#" class="btn btn-outline-dark">Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <h5 class="text-center">You do not have any events yet.</h5>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
