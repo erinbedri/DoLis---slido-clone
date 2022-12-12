@@ -28,10 +28,13 @@ def homepage(request):
 
 def event_details(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    questions = Question.objects\
+    recent_questions = Question.objects\
         .filter(event=event)\
         .order_by('-created_at')
-    questions_count = len([q for q in questions if not q.parent])
+    oldest_questions = Question.objects\
+        .filter(event=event)\
+        .order_by('created_at')
+    questions_count = len([q for q in recent_questions if not q.parent])
 
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -62,7 +65,8 @@ def event_details(request, pk):
 
     context = {
         'event': event,
-        'questions': questions,
+        'recent_questions': recent_questions,
+        'oldest_questions': oldest_questions,
         'questions_count': questions_count,
         'form': form,
     }

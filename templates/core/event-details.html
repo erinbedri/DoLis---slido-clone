@@ -45,13 +45,13 @@
                         </button>
                         <button class="nav-link link-dark" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-profile"
-                                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Popular
+                                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Oldest
                         </button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        {% for question in questions %}
+                        {% for question in recent_questions %}
                             {% if not question.parent %}
                                 <div class="card" style="margin-top: 15px">
                                     <div class="card-header" {% if request.user == question.author %}
@@ -142,7 +142,100 @@
                         {% endfor %}
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                             aria-labelledby="nav-home-tab">
+                            {% for question in oldest_questions %}
+                                {% if not question.parent %}
+                                    <div class="card" style="margin-top: 15px">
+                                        <div class="card-header" {% if request.user == question.author %}
+                                             style="background-color: #D8D8D8" {% endif %}>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <b>{{ question.author }}</b>
+                                                    said {{ question.created_at|timesince }} ago
+                                                </div>
+                                                {% if request.user == question.author %}
+                                                    <div class="col-1">
+                                                        <a href="{% url 'core:question delete' question.id %}"
+                                                           class="link-dark">
+                                                            <i class="bi bi-trash"></i></a> Delete
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <blockquote class="blockquote mb-0">
+                                                <p style="font-size: small">{{ question.body|linebreaksbr }}</p>
+                                            </blockquote>
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <button type="button" class="btn btn-outline-dark btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#question{{ question.id }}"
+                                                        style="margin-top: 15px">
+                                                    <i class="fa-solid fa-reply"></i>
+                                                    {% if question.replies.all.count == 1 %}
+                                                        {{ question.replies.all.count }} Reply
+                                                    {% else %}
+                                                        {{ question.replies.all.count }} Replies
+                                                    {% endif %}
+                                                </button>
 
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="question{{ question.id }}" tabindex="-1"
+                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    Replies</h5>
+                                                                <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                {% for reply in question.replies.all|dictsortreversed:'created_at' %}
+                                                                    <span class="badge rounded-pill bg-dark">{{ forloop.revcounter }}</span>
+                                                                    <b>{{ reply.author }}</b> said
+                                                                    {{ reply.created_at|timesince }} ago
+                                                                    <p>- {{ reply.body|linebreaksbr }}</p>
+                                                                {% empty %}
+                                                                    There are no replies.
+                                                                {% endfor %}
+                                                            </div>
+
+                                                            {% if request.user.is_authenticated %}
+                                                                <div class="modal-footer">
+                                                                    <form action="{% url 'core:event details' event.id %}"
+                                                                          method="post">
+                                                                        {% csrf_token %}
+                                                                        {{ form }}
+                                                                        <input type="hidden" name="parent_id"
+                                                                               value="{{ question.id }}">
+                                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end"
+                                                                             style="margin-top: 15px">
+                                                                            <button type="submit" class="btn btn-dark">
+                                                                                Reply
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    class="btn btn-outline-dark"
+                                                                                    data-bs-dismiss="modal">Close
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            {% endif %}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% empty %}
+                                <h4 style="margin-top: 20px">There are no questions yet.</h4>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
