@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from DoLis.core.forms import QuestionForm, LoginForm, RegistrationForm, EventCreateForm
+from DoLis.core.forms import QuestionForm, LoginForm, RegistrationForm, EventCreateForm, EventEditForm
 from DoLis.core.models import Event, Question
 
 
@@ -165,3 +165,23 @@ def event_delete(request, pk):
         event.delete()
 
     return redirect('core:own events list')
+
+
+@login_required
+def event_edit(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+
+    if event.owner == request.user:
+        if request.method == 'POST':
+            form = EventEditForm(request.POST, instance=event)
+            if form.is_valid():
+                event.save()
+                return redirect('core:own events list')
+        else:
+            form = EventEditForm(instance=event)
+
+        context = {
+            'form': form,
+        }
+
+        return render(request, 'core/event-edit.html', context)

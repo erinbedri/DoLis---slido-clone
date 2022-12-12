@@ -16,7 +16,7 @@
                             <p class="card-text">#{{ event.code }}</p>
                             <a href="{% url 'core:event details' event.id %}" class="btn btn-dark">Join Event</a>
                             {% if request.user == event.owner %}
-                                <a href="#" class="btn btn-outline-dark">Edit</a>
+                                <a href="{% url 'core:event edit' event.id %}" class="btn btn-outline-dark">Edit</a>
                                 <a href="{% url 'core:event delete' event.id %}" class="btn btn-outline-dark">Delete</a>
                             {% endif %}
                         </div>

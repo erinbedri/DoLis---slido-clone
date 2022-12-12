@@ -84,3 +84,20 @@ class EventCreateForm(forms.ModelForm):
                 attrs={'class': 'form-control'}
             ),
         }
+
+
+class EventEditForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('name', 'code', 'description')
+        widgets = {
+            'name': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'code': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'description': forms.Textarea(
+                attrs={'class': 'form-control'}
+            ),
+        }
