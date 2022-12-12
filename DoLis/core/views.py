@@ -131,3 +131,9 @@ def event_create(request):
         'form': form,
     }
     return render(request, 'core/event-create.html', context)
+
+
+def question_delete(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    question.delete()
+    return redirect('core:event details', question.event.id)
