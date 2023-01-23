@@ -62,10 +62,10 @@
                                                 said {{ question.created_at|timesince }} ago
                                             </div>
                                             {% if request.user == question.author %}
-                                                <div class="col-1">
+                                                <div class="col-1 d-flex justify-content-end">
                                                     <a href="{% url 'core:question delete' question.id %}"
                                                        class="link-dark">
-                                                        <i class="bi bi-trash"></i></a> Delete
+                                                        <i class="bi bi-trash"></i></a>
                                                 </div>
                                             {% endif %}
                                         </div>
@@ -155,10 +155,10 @@
                                                     said {{ question.created_at|timesince }} ago
                                                 </div>
                                                 {% if request.user == question.author %}
-                                                    <div class="col-1">
+                                                <div class="col-1 d-flex justify-content-end">
                                                         <a href="{% url 'core:question delete' question.id %}"
                                                            class="link-dark">
-                                                            <i class="bi bi-trash"></i></a> Delete
+                                                            <i class="bi bi-trash"></i></a>
                                                     </div>
                                                 {% endif %}
                                             </div>
